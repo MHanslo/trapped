@@ -16,13 +16,14 @@ UDoorController::UDoorController()
 void UDoorController::BeginPlay()
 {
 	Super::BeginPlay();
+    Player = GetWorld() -> GetFirstPlayerController() -> GetPawn();
 }
 
 void UDoorController::OpenDoor()
 {
 	AActor* Owner = GetOwner();
 	FRotator newRotation = FRotator(0.0, 0.0, 0.0);
-	Owner->SetActorRotation(newRotation);
+	Owner -> SetActorRotation(newRotation);
 }
 
 // Called every frame
