@@ -22,8 +22,13 @@ void UDoorController::BeginPlay()
 void UDoorController::OpenDoor()
 {
 	AActor* Owner = GetOwner();
-	FRotator newRotation = FRotator(0.0, 0.0, 0.0);
-	Owner -> SetActorRotation(newRotation);
+	Owner -> SetActorRotation(FRotator(0.0, 0.0, 0.0));
+}
+
+void UDoorController::CloseDoor()
+{
+    AActor* Owner = GetOwner();
+    Owner -> SetActorRotation(FRotator(0.0, 90.0, 0.0));
 }
 
 // Called every frame
@@ -33,6 +38,8 @@ void UDoorController::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 	if (PressurePlate -> IsOverlappingActor(Player)) {
 		this -> OpenDoor();
-	}
+    } else {
+        this -> CloseDoor();
+    }
 }
 

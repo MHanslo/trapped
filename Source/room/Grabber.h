@@ -4,33 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Runtime/Engine/Classes/GameFramework/Actor.h"
-#include "Engine/TriggerVolume.h"
-#include "DoorController.generated.h"
+#include "Runtime/Engine/Classes/Engine/World.h"
+#include "DrawDebugHelpers.h"
+#include "Grabber.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class ROOM_API UDoorController : public UActorComponent
+class ROOM_API UGrabber : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UDoorController();
+	UGrabber();
 
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	void OpenDoor();
-  void CloseDoor();
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-private:
-	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate;
-
-	AActor* Player;
+private:	
+	float Reach = 70.f;
 };
