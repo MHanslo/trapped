@@ -47,6 +47,8 @@
 # Precompiled Assets
 SourceArt/**/*.png
 SourceArt/**/*.tga
+Content/StarterContent/HDRI
+Content/StarterContent/Textures
 
 # Binary Files
 Binaries/*
