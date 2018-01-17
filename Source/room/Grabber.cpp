@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Grabber.h"
-
+#define OUT
 
 // Sets default values for this component's properties
 UGrabber::UGrabber()
@@ -13,29 +13,38 @@ UGrabber::UGrabber()
 	// ...
 }
 
-
 // Called when the game starts
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
 
 	// ...
-	
 }
 
-
 // Called every frame
-void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	FVector PlayerVector;
 	FRotator PlayerRotator;
 
-	GetWorld() -> GetFirstPlayerController() -> GetPlayerViewPoint(PlayerVector, PlayerRotator);
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerVector, PlayerRotator);
 	// UE_LOG(LogTemp, Warning, TEXT("Vector: %s, Rotation: %s"), *PlayerVector.ToString(), *PlayerRotator.ToCompactString())
 
 	FVector LineTraceEnd = PlayerVector + PlayerRotator.Vector() * Reach;
 	DrawDebugLine(GetWorld(), PlayerVector, LineTraceEnd, FColor(250, 250, 250), false, 0.f, 0, 10.f);
-}
 
+	FHitResult Hit;
+	GetWorld()->LineTraceSingleByObjectType(
+			OUT Hit,
+			PlayerVector,
+			LineTraceEnd,
+			FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+			FCollisionQueryParams(FName(TEXT("")), false, GetOwner()));
+
+	AActor * ActorHit = Hit.GetActor();
+	if (ActorHit) {
+		UE_LOG(LogTemp, Warning, TEXT("Hit: %s"), *ActorHit -> GetName());
+	}
+}
