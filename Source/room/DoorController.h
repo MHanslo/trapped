@@ -22,7 +22,7 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	void OpenDoor();
-  void CloseDoor();
+	void CloseDoor();
 
 public:	
 	// Called every frame

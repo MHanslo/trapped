@@ -17,32 +17,70 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-	PhysicsHandler = GetOwner() -> FindComponentByClass<UPhysicsHandleComponent>();
+	FindPhysicsHandleComponent();
+	SetupInputComponent();
 }
 
 // Called every frame
 void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+}
 
+void UGrabber::Grab()
+{
+	GetFirstPhysicsBodyInReach();
+}
+
+void UGrabber::Release()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Releasing!"));
+}
+
+void UGrabber::FindPhysicsHandleComponent()
+{
+	PhysicsHandler = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	if (!PhysicsHandler)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UPhysicsHandleComponent not found!"));
+	}
+}
+
+void UGrabber::SetupInputComponent()
+{
+	InputComponent = GetOwner()->FindComponentByClass<UInputComponent>();
+	if (InputComponent)
+	{
+		InputComponent->BindAction("Grab", IE_Pressed, this, &UGrabber::Grab);
+		InputComponent->BindAction("Grab", IE_Released, this, &UGrabber::Release);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("InputComponent not found!"));
+	}
+}
+
+FHitResult UGrabber::GetFirstPhysicsBodyInReach()
+{	
 	FVector PlayerVector;
 	FRotator PlayerRotator;
 
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerVector, PlayerRotator);
 
 	FVector LineTraceEnd = PlayerVector + PlayerRotator.Vector() * Reach;
-	DrawDebugLine(GetWorld(), PlayerVector, LineTraceEnd, FColor(250, 250, 250), false, 0.f, 0, 10.f);
 
 	FHitResult Hit;
 	GetWorld()->LineTraceSingleByObjectType(
-			OUT Hit,
-			PlayerVector,
-			LineTraceEnd,
-			FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
-			FCollisionQueryParams(FName(TEXT("")), false, GetOwner()));
+		OUT Hit,
+		PlayerVector,
+		LineTraceEnd,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		FCollisionQueryParams(FName(TEXT("")), false, GetOwner()));
 
 	AActor * ActorHit = Hit.GetActor();
 	if (ActorHit) {
-		UE_LOG(LogTemp, Warning, TEXT("Hit: %s"), *ActorHit -> GetName());
+		UE_LOG(LogTemp, Warning, TEXT("Hit: %s"), *ActorHit->GetName());
 	}
+	return FHitResult();
 }
+
