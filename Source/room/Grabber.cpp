@@ -17,8 +17,7 @@ UGrabber::UGrabber()
 void UGrabber::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
+	PhysicsHandler = GetOwner() -> FindComponentByClass<UPhysicsHandleComponent>();
 }
 
 // Called every frame
@@ -30,7 +29,6 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	FRotator PlayerRotator;
 
 	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerVector, PlayerRotator);
-	// UE_LOG(LogTemp, Warning, TEXT("Vector: %s, Rotation: %s"), *PlayerVector.ToString(), *PlayerRotator.ToCompactString())
 
 	FVector LineTraceEnd = PlayerVector + PlayerRotator.Vector() * Reach;
 	DrawDebugLine(GetWorld(), PlayerVector, LineTraceEnd, FColor(250, 250, 250), false, 0.f, 0, 10.f);
