@@ -28,13 +28,14 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:	
-	float Reach = 70.f;
 	void Grab();
 	void Release();
 	void FindPhysicsHandleComponent();
 	void SetupInputComponent();
 	FVector GetPlayerLineTraceEnd();
+	FHitResult GetFirstPhysicsBodyInReach();
 	UPhysicsHandleComponent* PhysicsHandler = nullptr;
 	UInputComponent* InputComponent = nullptr;
-	FHitResult GetFirstPhysicsBodyInReach();
+	FVector PlayerVector;
+	FRotator PlayerRotator;
 };

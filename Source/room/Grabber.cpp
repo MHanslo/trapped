@@ -78,11 +78,8 @@ void UGrabber::SetupInputComponent()
 }
 
 FHitResult UGrabber::GetFirstPhysicsBodyInReach()
-{	
-	FVector PlayerVector;
-	FRotator PlayerRotator;
-
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerVector, PlayerRotator);
+{
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerVector, OUT PlayerRotator);
 	FHitResult Hit;
 	GetWorld()->LineTraceSingleByObjectType(
 		OUT Hit,
@@ -95,9 +92,6 @@ FHitResult UGrabber::GetFirstPhysicsBodyInReach()
 
 FVector UGrabber::GetPlayerLineTraceEnd()
 {
-	FVector PlayerVector;
-	FRotator PlayerRotator;
-
-	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerVector, PlayerRotator);
-	return PlayerVector + PlayerRotator.Vector() * Reach;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerVector, OUT PlayerRotator);
+	return PlayerVector + PlayerRotator.Vector() * 70.f;
 }
