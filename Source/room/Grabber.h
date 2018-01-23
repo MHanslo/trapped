@@ -33,6 +33,7 @@ private:
 	void Release();
 	void FindPhysicsHandleComponent();
 	void SetupInputComponent();
+	FVector GetPlayerLineTraceEnd();
 	UPhysicsHandleComponent* PhysicsHandler = nullptr;
 	UInputComponent* InputComponent = nullptr;
 	FHitResult GetFirstPhysicsBodyInReach();
