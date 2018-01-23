@@ -2,6 +2,8 @@
 
 #include "DoorController.h"
 
+#define OUT
+
 // Sets default values for this component's properties
 UDoorController::UDoorController()
 {
@@ -16,7 +18,6 @@ UDoorController::UDoorController()
 void UDoorController::BeginPlay()
 {
 	Super::BeginPlay();
-    Player = GetWorld() -> GetFirstPlayerController() -> GetPawn();
 }
 
 void UDoorController::OpenDoor()
@@ -35,11 +36,23 @@ void UDoorController::CloseDoor()
 void UDoorController::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if (PressurePlate -> IsOverlappingActor(Player)) {
+	if (GetTotalWeightOnPlate() > 20.f) {
 		this -> OpenDoor();
     } else {
         this -> CloseDoor();
     }
+}
+
+float UDoorController::GetTotalWeightOnPlate()
+{
+	TArray<AActor*> OverlappingActors;
+	float weight = 0.f;
+	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
+
+	for (const auto& Actor : OverlappingActors)
+	{
+		weight += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+	}
+	return weight;
 }
 
