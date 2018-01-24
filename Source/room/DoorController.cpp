@@ -18,6 +18,11 @@ UDoorController::UDoorController()
 void UDoorController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (!PressurePlate)
+	{
+		UE_LOG(LogTemp, Error, TEXT("PressurePlate TriggerVolume is not assigned."));
+	}
 }
 
 void UDoorController::OpenDoor()
@@ -47,18 +52,7 @@ float UDoorController::GetTotalWeightOnPlate()
 {
 	TArray<AActor*> OverlappingActors;
 	float weight = 0.f;
-
-	if (PressurePlate)
-	{
-		PressurePlate->GetOverlappingActors(OUT OverlappingActors);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("PressurePlate TriggerVolume is not assigned."));
-		return 0.f;
-	}
-	
-
+	PressurePlate->GetOverlappingActors(OUT OverlappingActors);
 	for (const auto& Actor : OverlappingActors)
 	{
 		weight += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
