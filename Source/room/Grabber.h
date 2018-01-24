@@ -29,7 +29,6 @@ public:
 
 private:	
 	void Grab();
-	void Release();
 	void FindPhysicsHandleComponent();
 	void SetupInputComponent();
 	FVector GetPlayerLineTraceEnd();

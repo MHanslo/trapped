@@ -55,7 +55,7 @@ float UDoorController::GetTotalWeightOnPlate()
 	else
 	{
 		UE_LOG(LogTemp, Error, TEXT("PressurePlate TriggerVolume is not assigned."));
-		return 0.f;
+		return weight;
 	}
 	
 
