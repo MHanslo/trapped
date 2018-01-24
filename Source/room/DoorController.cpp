@@ -20,32 +20,23 @@ void UDoorController::BeginPlay()
 	Super::BeginPlay();
 }
 
-void UDoorController::OpenDoor()
-{
-	AActor* Owner = GetOwner();
-	Owner -> SetActorRotation(FRotator(0.0, 0.0, 0.0));
-}
-
-void UDoorController::CloseDoor()
-{
-    AActor* Owner = GetOwner();
-    Owner -> SetActorRotation(FRotator(0.0, 90.0, 0.0));
-}
-
 // Called every frame
-void UDoorController::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UDoorController::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if (GetTotalWeightOnPlate() > 20.f) {
-		this -> OpenDoor();
-    } else {
-        this -> CloseDoor();
-    }
+	if (GetTotalWeightOnPlate() > TriggerWeight)
+	{
+		OnOpenRequest.Broadcast();
+	}
+	else
+	{
+		OnCloseRequest.Broadcast();
+	}
 }
 
 float UDoorController::GetTotalWeightOnPlate()
 {
-	TArray<AActor*> OverlappingActors;
+	TArray<AActor *> OverlappingActors;
 	float weight = 0.f;
 
 	if (PressurePlate)
@@ -57,12 +48,10 @@ float UDoorController::GetTotalWeightOnPlate()
 		UE_LOG(LogTemp, Error, TEXT("PressurePlate TriggerVolume is not assigned."));
 		return weight;
 	}
-	
 
-	for (const auto& Actor : OverlappingActors)
+	for (const auto &Actor : OverlappingActors)
 	{
 		weight += Actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
 	}
 	return weight;
 }
-
