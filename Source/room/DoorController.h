@@ -30,6 +30,6 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
-	ATriggerVolume* PressurePlate;
+	ATriggerVolume* PressurePlate = nullptr;
 	float GetTotalWeightOnPlate();
 };
